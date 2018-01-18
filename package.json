@@ -1,9 +1,9 @@
 {
-    "name": "fe-app-boilerplate",
+    "name": "sunburst-fe-boilerplate",
     "private": true,
     "version": "0.1.0",
-    "description": "The Frontend Boilerplate for Tophat",
-    "author": "Top Hat Monocle Inc.",
+    "description": "The Frontend Boilerplate for Sunburst",
+    "author": "Tom Grant <tom@sunburst.io>",
     "main": "app/app.js",
     "scripts": {
         "postinstall": "node ./internals/scripts/buildDll.js",
@@ -63,10 +63,6 @@
         ]
     },
     "dependencies": {
-        "@thm/fe-common-components": "^0.3.52",
-        "@thm/fe-discussion": "^0.3.27",
-        "@thm/fe-page": "^0.3.28",
-        "@thm/fe-question": "0.3",
         "babel-polyfill": "6.23.0",
         "chalk": "1.1.3",
         "compression": "1.6.2",

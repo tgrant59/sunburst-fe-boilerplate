@@ -11,7 +11,6 @@ const uniq = require('lodash/uniq');
 const dllName = 'feDeps'
 
 const DLLConfig = {
-    version: '0.1.0',
     name: dllName,
 
     /**

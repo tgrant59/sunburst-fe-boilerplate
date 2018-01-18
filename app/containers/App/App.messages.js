@@ -1,7 +1,7 @@
 export default {
     helmet: {
-        titleTemplate: '%s | Top Hat',
+        titleTemplate: '%s | Sunburst Software',
         defaultTitle: 'Welcome',
-        description: 'Welcome to Top Hat!',
+        description: 'Welcome to Sunburst Software',
     },
 }

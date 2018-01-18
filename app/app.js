@@ -7,7 +7,18 @@ import { ConnectedRouter } from 'react-router-redux'
 import createHistory from 'history/createBrowserHistory'
 import 'sanitize.css/sanitize.css'
 
-import '!file-loader?name=[name].[ext]!./assets/favicon.ico'
+/* eslint-disable import/no-unresolved */
+import '!file-loader?name=[name].[ext]!./assets/favicons/android-chrome-192x192.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/android-chrome-512x512.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/apple-touch-icon.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/browserconfig.xml'
+import '!file-loader?name=[name].[ext]!./assets/favicons/favicon.ico'
+import '!file-loader?name=[name].[ext]!./assets/favicons/favicon-16x16.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/favicon-32x32.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/manifest.json'
+import '!file-loader?name=[name].[ext]!./assets/favicons/mstile-150x150.png'
+import '!file-loader?name=[name].[ext]!./assets/favicons/safari-pinned-tab.svg'
+/* eslint-enable import/no-unresolved */
 
 import App from 'containers/App'
 

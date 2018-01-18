@@ -1,5 +1,5 @@
-# fe-app-boilerplate
-Top Hat's Frontend Boilerplate App
+# sunburst-fe-boilerplate
+React Frontend Boilerplate App
 
 ## How to use the Boilerplate
 

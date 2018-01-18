@@ -9,7 +9,7 @@ exports[`<ExamplePage /> should match snapshot 1`] = `
       Users
     </title>
     <meta
-      content="The user example page of Top Hat"
+      content="The user example page of Sunburst.io"
       name="description"
     />
   </HelmetWrapper>
