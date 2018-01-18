@@ -1,0 +1,9 @@
+# ----- Misc Ignores -----
+.DS_STORE
+.idea/
+
+# ----- Project Ignores -----
+node_modules/
+artifacts/
+npm-debug.log.*
+yarn-error.log
