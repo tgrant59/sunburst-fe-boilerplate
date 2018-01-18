@@ -22,8 +22,10 @@ cloudformation_response=$(aws cloudformation deploy \
 
 returnCode=$?
 NO_UPDATE_REQUIRED="Submit different information to create a change set"
+NO_UPDATE_REQUIRED_2="No changes to deploy"
 
-if [[ $returnCode -ne 0 ]] && [[ $cloudformation_response != *$NO_UPDATE_REQUIRED* ]]; then
+if [[ $returnCode -ne 0 ]] && [[ $cloudformation_response != *$NO_UPDATE_REQUIRED* ]] && [[ $cloudformation_response != *$NO_UPDATE_REQUIRED_2* ]]; then
+    echo $cloudformation_response
     echo -e "${RED}CloudFormation Deployment Failed${NC}"
     exit 1
 fi
