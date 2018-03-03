@@ -1,4 +1,4 @@
-# sunburst-fe-boilerplate
+# sunburst-fe-boilerplate [![CircleCI](https://circleci.com/gh/tgrant59/sunburst-fe-boilerplate.svg?style=svg)](https://circleci.com/gh/tgrant59/sunburst-fe-boilerplate)
 Sunburst's React Boilerplate Project
 
 ## How to use the Boilerplate
