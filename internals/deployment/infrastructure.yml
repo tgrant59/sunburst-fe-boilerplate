@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: !Join ['', 'The stack for ', !Ref DomainName, ', a static React app on S3 + Cloudfront']
+Description: 'The stack for Sunburst FE Boilerplate, a static React app on S3 + Cloudfront'
 
 Parameters:
   AppName:
