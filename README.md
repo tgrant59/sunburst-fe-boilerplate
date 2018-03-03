@@ -1,5 +1,5 @@
 # sunburst-fe-boilerplate
-React Frontend Boilerplate App
+Sunburst's React Boilerplate Project
 
 ## How to use the Boilerplate
 
@@ -17,8 +17,9 @@ You'll need to perform a few steps to create a new project using this boilerplat
     - Configure deployment details 
         - [Staging Config](./internals/deployment/staging-config.sh)
         - [Production Config](./internals/deployment/production-config.sh)
-        - **Note** - You shouldn't have to create anything manually on AWS (like buckets, distributions, etc.). The CloudFormation template should take care of it.
-        - **Note** - The first deployment may seem to take a really long time. This is because it waits for the CloudFront distribution to be totally (takes a while)
+        - **Note** - You shouldn't have to create anything manually on AWS (like buckets, distributions, etc.). The CloudFormation template should take care of it. You *may* have to create a new SSL certificate manually through the AWS Certificate Manager (if none of the available ones meet your needs), but probably not.
+        - **Note** - The first deployment may seem to take a really long time. This is because it waits for the CloudFront distribution to be totally deployed (takes a while)
+        - Uncomment the deployment steps and the deployment notifications in your `Jenkinsfile`
 
 ## Developing the Boilerplate
 

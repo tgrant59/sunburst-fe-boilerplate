@@ -21,7 +21,9 @@ export const oneOfComponents = (componentTypes, isRequired = false) => (
     }
     if (!componentTypes.includes(prop.type))
         return new Error(
-            `Invalid prop \`${propName}\` of type \`${prop.type}\` supplied to ${parentComponentName}, expected one of [${componentTypes.map(
+            `Invalid prop \`${propName}\` of type \`${
+                prop.type
+            }\` supplied to ${parentComponentName}, expected one of [${componentTypes.map(
                 c => `\`${c.name}\``,
             )}].`,
         )
@@ -46,7 +48,9 @@ export const areComponents = (componentTypes, isRequired = false) => (
     }
     if (!Array.isArray(prop)) {
         return new Error(
-            `Invalid prop \`${propName}\` of type \`${prop.type}\` supplied to ${parentComponentName}, expected an \`Array\`.`,
+            `Invalid prop \`${propName}\` of type \`${
+                prop.type
+            }\` supplied to ${parentComponentName}, expected an \`Array\`.`,
         )
     }
 
@@ -55,7 +59,9 @@ export const areComponents = (componentTypes, isRequired = false) => (
     )
     return invalidChild
         ? new Error(
-              `Invalid child of prop \`${propName}\` of type \`${invalidChild.type}\` supplied to ${parentComponentName}, expected all children to be one of [${componentTypes.map(
+              `Invalid child of prop \`${propName}\` of type \`${
+                  invalidChild.type
+              }\` supplied to ${parentComponentName}, expected all children to be one of [${componentTypes.map(
                   c => `\`${c.name}\``,
               )}].`,
           )

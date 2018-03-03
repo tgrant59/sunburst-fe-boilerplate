@@ -6,62 +6,19 @@
     "author": "Tom Grant <tom@sunburst.io>",
     "main": "app/app.js",
     "scripts": {
-        "postinstall": "node ./internals/scripts/buildDll.js",
-        "precommit": "lint-staged"
+        "postinstall": "./internals/scripts/check-versions.sh && node ./internals/scripts/buildDll.js",
+        "precommit": "./internals/scripts/check-versions.sh && lint-staged"
     },
     "lint-staged": {
         "*.js": [
             "node_modules/.bin/eslint",
             "node_modules/.bin/stylelint",
-            "node_modules/.bin/jest --bail --findRelatedTests"
+            "node_modules/.bin/jest --config internals/testing/jestConfig.json --bail --findRelatedTests"
         ]
     },
     "moduleRoots": [
         "app"
     ],
-    "jest": {
-        "bail": false,
-        "collectCoverageFrom": [
-            "app/**/*.js",
-            "!app/**/*.test.js",
-            "!app/**/stories.js"
-        ],
-        "coverageDirectory": "./artifacts/coverage",
-        "notify": false,
-        "timers": "real",
-        "verbose": false,
-        "rootDir": ".",
-        "resetMocks": false,
-        "resetModules": false,
-        "setupTestFrameworkScriptFile": "<rootDir>/internals/testing/test-bundler.js",
-        "setupFiles": [
-            "<rootDir>/internals/testing/shim.js",
-            "<rootDir>/internals/testing/enzyme-setup.js"
-        ],
-        "snapshotSerializers": [
-            "enzyme-to-json/serializer"
-        ],
-        "unmockedModulePathPatterns": [
-            "<rootDir>/node_modules/react"
-        ],
-        "modulePaths": [
-            "app"
-        ],
-        "moduleNameMapper": {
-            "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/testing/mocks/image.js",
-            "\\.(scss|css|less)$": "<rootDir>/internals/testing/mocks/css.js"
-        },
-        "testRegex": "((\\.|/)test)\\.jsx?$",
-        "testPathIgnorePatterns": [
-            "/artifacts/",
-            "/internals/",
-            "/server",
-            "/node_modules/"
-        ],
-        "transformIgnorePatterns": [
-            "node_modules/(?!(@thm/.+/index\\.js))"
-        ]
-    },
     "dependencies": {
         "babel-polyfill": "6.23.0",
         "chalk": "1.1.3",
@@ -69,8 +26,7 @@
         "cross-env": "5.0.0",
         "express": "4.15.3",
         "fontfaceobserver": "2.0.9",
-        "formsy-react": "^0.19.2",
-        "history": "4.6.3",
+        "history": "^4.7.2",
         "hoist-non-react-statics": "2.1.1",
         "immutable": "3.8.1",
         "invariant": "2.2.2",
@@ -78,20 +34,19 @@
         "lodash": "4.17.4",
         "minimist": "1.2.0",
         "prop-types": "15.5.10",
-        "react": "^16.0.0",
-        "react-dom": "^16.0.0",
-        "react-helmet": "5.1.3",
-        "react-list": "^0.8.8",
-        "react-loadable": "^5.2.4",
-        "react-redux": "5.0.5",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "react-helmet": "^5.2.0",
+        "react-loadable": "^5.3.1",
+        "react-redux": "^5.0.7",
         "react-router-dom": "^4.2.2",
-        "react-router-redux": "^5.0.0-alpha.6",
-        "redux": "3.6.0",
+        "react-router-redux": "^5.0.0-alpha.9",
+        "redux": "^3.7.2",
         "redux-immutable": "4.0.0",
-        "redux-saga": "0.15.3",
+        "redux-saga": "^0.16.0",
         "reselect": "3.0.1",
         "sanitize.css": "4.1.0",
-        "styled-components": "^2.2.1",
+        "styled-components": "^3.1.6",
         "warning": "3.0.0",
         "whatwg-fetch": "2.0.3"
     },
@@ -100,11 +55,12 @@
         "babel-cli": "6.24.1",
         "babel-core": "6.24.1",
         "babel-eslint": "7.2.3",
+        "babel-jest": "^22.4.1",
         "babel-loader": "7.1.0",
         "babel-plugin-dynamic-import-node": "1.0.2",
         "babel-plugin-react-intl": "2.3.1",
         "babel-plugin-react-transform": "2.0.2",
-        "babel-plugin-styled-components": "1.1.4",
+        "babel-plugin-styled-components": "^1.5.0",
         "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
         "babel-plugin-transform-react-constant-elements": "6.23.0",
         "babel-plugin-transform-react-inline-elements": "6.22.0",
@@ -121,7 +77,7 @@
         "eslint": "3.19.0",
         "eslint-config-airbnb": "15.0.1",
         "eslint-config-airbnb-base": "11.2.0",
-        "eslint-config-prettier": "^2.6.0",
+        "eslint-config-prettier": "^2.9.0",
         "eslint-import-resolver-webpack": "^0.8.3",
         "eslint-plugin-import": "2.7.0",
         "eslint-plugin-jsx-a11y": "5.0.3",
@@ -136,16 +92,14 @@
         "husky": "^0.14.3",
         "image-webpack-loader": "2.0.0",
         "imports-loader": "0.7.1",
-        "jest": "^21.2.1",
-        "jest-cli": "20.0.4",
-        "jest-junit": "^3.1.0",
-        "jest-styled-components": "^4.7.1",
-        "lint-staged": "^4.2.3",
+        "jest": "^22.4.2",
+        "jest-junit": "^3.6.0",
+        "jest-styled-components": "^5.0.0",
+        "lint-staged": "^7.0.0",
         "ngrok": "2.2.9",
-        "node-plop": "0.7.0",
         "null-loader": "0.1.1",
-        "plop": "1.8.0",
-        "prettier": "^1.7.4",
+        "prettier": "^1.10.2",
+        "puppeteer": "^1.0.0",
         "react-test-renderer": "^16.0.0",
         "rimraf": "2.6.1",
         "shelljs": "0.7.7",
@@ -154,7 +108,8 @@
         "stylelint-config-standard": "^17.0.0",
         "stylelint-config-styled-components": "^0.1.1",
         "stylelint-junit-formatter": "^0.2.0",
-        "stylelint-processor-styled-components": "^1.0.0",
+        "stylelint-processor-styled-components": "^1.3.0",
+        "typescript": "^2.7.2",
         "url-loader": "0.5.8",
         "webpack": "3.5.5",
         "webpack-dev-middleware": "1.11.0",

@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:8.6.0
-    working_directory: ~
+      - image: tgrant/sunburst-react-boilerplate-circleci:0.0.1
+    working_directory: ~/repo
     steps:
       - checkout
 
@@ -39,6 +39,13 @@ jobs:
           name: Build App
           command: PROD=1 make build
 
+      - run:
+          name: Run E2Es locally
+          command: |
+            PROD=1 make start &
+            sleep 5
+            E2E_TARGET=local make test-e2e
+
       - store_artifacts:
           path: artifacts
 
@@ -46,41 +53,59 @@ jobs:
           path: artifacts/test_results
 
       - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory
           root: ./
+          # Must be relative path from root
           paths:
             - artifacts/
             - node_modules/
 
-#  deploy:
-#    docker:
-#      - image: circleci/node:8.6.0
-#    working_directory: ~
-#    steps:
-#      - checkout
-#
-#      - attach_workspace:
-#          at: ~
-#
-#      - run:
-#          name: Install Deployment Dependencies
-#          command: make install-deployment-deps
-#
-#      - run:
-#          name: Deploy Staging
-#          command: make deploy-staging
-#
-#      - run:
-#          name: Deploy Production
-#          command: make deploy-production
-#
-#workflows:
-#  version: 2
-#  build_and_deploy:
-#    jobs:
-#      - build
-#      - deploy:
-#          requires:
-#            - build
-#          filters:
-#            branches:
-#              only: master
+  deploy:
+    docker:
+      - image: tgrant/sunburst-react-boilerplate-circleci:0.0.1
+    working_directory: ~/repo
+    steps:
+      - checkout
+
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Deploy Staging
+          command: make deploy-staging
+
+      - run:
+          name: Run E2Es on staging
+          command: |
+            PROD=1 make start &
+            sleep 5
+            E2E_TARGET=staging make test-e2e
+
+      - run:
+          name: Deploy Production
+          command: make deploy-production
+
+      - run:
+          name: Run E2Es on production
+          command: |
+            PROD=1 make start &
+            sleep 5
+            E2E_TARGET=production make test-e2e
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+experimental:
+  notify:
+    branches:
+      only:
+        - master

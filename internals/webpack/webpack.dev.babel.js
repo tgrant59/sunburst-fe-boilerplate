@@ -2,13 +2,13 @@
  * DEVELOPMENT WEBPACK CONFIGURATION
  */
 
-const path = require('path');
-const fs = require('fs');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
-const CircularDependencyPlugin = require('circular-dependency-plugin');
-const logger = require('../../server/logger');
+const path = require('path')
+const fs = require('fs')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin')
+const CircularDependencyPlugin = require('circular-dependency-plugin')
+const logger = require('../../server/logger')
 const dllConfig = require('../dllConfig')
 
 const plugins = [
@@ -25,7 +25,7 @@ const plugins = [
     new AddAssetHtmlPlugin({
         filepath: path.resolve(dllConfig.path, `${dllConfig.name}.dll.js`),
         includeSourcemap: false,
-    })
+    }),
 ]
 
 module.exports = require('./webpack.base.babel')({
@@ -58,7 +58,9 @@ module.exports = require('./webpack.base.babel')({
  */
 function dependencyHandlers() {
     // Don't do anything during the DLL Build step
-    if (process.env.BUILDING_DLL) { return []; }
+    if (process.env.BUILDING_DLL) {
+        return []
+    }
 
     const manifestPath = path.resolve(dllConfig.path, `${dllConfig.name}.json`)
 
@@ -68,9 +70,9 @@ function dependencyHandlers() {
     }
 
     return [
-      new webpack.DllReferencePlugin({
-        context: process.cwd(),
-        manifest: require(manifestPath), // eslint-disable-line global-require
-      }),
-    ];
+        new webpack.DllReferencePlugin({
+            context: process.cwd(),
+            manifest: require(manifestPath), // eslint-disable-line global-require
+        }),
+    ]
 }

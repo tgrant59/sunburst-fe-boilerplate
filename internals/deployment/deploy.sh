@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-source "$DIR/../scripts/helpers/shell-helpers.sh"
+source "$DIR/../scripts/shell-helpers.sh"
 
 if [ "$PRODUCTION" == "true" ]; then
     source "$DIR/production-config.sh"
@@ -9,6 +9,7 @@ else
     source "$DIR/staging-config.sh"
 fi
 
+echo -e "${GREEN}Building/Updating CloudFormation Stack${NC}"
 cloudformation_response=$(aws cloudformation deploy \
     --template-file $DIR/infrastructure.yml \
     --stack-name $STACK_NAME \
@@ -30,7 +31,8 @@ if [[ $returnCode -ne 0 ]] && [[ $cloudformation_response != *$NO_UPDATE_REQUIRE
     exit 1
 fi
 
-run "aws s3 sync artifacts/build/ s3://${BUCKET_NAME}/"
+echo -e "${GREEN}Deploying files to S3${NC}"
+run "aws s3 sync artifacts/build/ s3://${BUCKET_NAME}/ --exclude 'index.html' --exclude '*.map'"
 run "aws s3 cp artifacts/build/index.html s3://${BUCKET_NAME}/index.html --cache-control max-age=300"
 
 if [ "$SET_NO_ROBOTS" == "true" ]; then

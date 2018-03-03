@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "A Template for deploying a static React app to S3 + Cloudfront"
+Description: !Join ['', 'The stack for ', !Ref DomainName, ', a static React app on S3 + Cloudfront']
 
 Parameters:
   AppName:
@@ -23,6 +23,14 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref BucketName
+      CorsConfiguration:
+        CorsRules:
+        - AllowedOrigins:
+          - !Join ['', ['https://', !Ref DomainName]]
+          AllowedMethods:
+          - GET
+          AllowedHeaders:
+          - '*'
       VersioningConfiguration:
         Status: Enabled
       WebsiteConfiguration:
@@ -55,7 +63,9 @@ Resources:
           DefaultCacheBehavior:
             Compress: true
             ForwardedValues:
-              QueryString: false
+              QueryString: true
+              QueryStringCacheKeys:
+              - nocache
             TargetOriginId: !Ref BucketName
             ViewerProtocolPolicy: redirect-to-https
           DefaultRootObject: index.html

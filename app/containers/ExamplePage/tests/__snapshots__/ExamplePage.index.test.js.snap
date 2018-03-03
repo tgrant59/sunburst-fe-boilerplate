@@ -3,6 +3,7 @@
 exports[`<ExamplePage /> should match snapshot 1`] = `
 <ExamplePage__CenteredDiv>
   <HelmetWrapper
+    defer={true}
     encodeSpecialCharacters={true}
   >
     <title>

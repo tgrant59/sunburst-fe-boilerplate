@@ -1,6 +1,8 @@
 SRC_DIR = app
-BUILD_DIR = build
 ARTIFACT_DIR = artifacts
+BUILD_DIR = ${ARTIFACT_DIR}/build
+INTERNALS_DIR = internals
+E2E_DIR = e2es
 
 # so we can use `eslint` without ./node_modules/.bin/eslint
 SHELL := /bin/bash
@@ -13,16 +15,20 @@ ifdef CI
     ESLINT_EXTRA_ARGS=--format junit --output-file $(ARTIFACT_DIR)/test_results/eslint/eslint.junit.xml
     STYLELINT_EXTRA_ARGS=--custom-formatter node_modules/stylelint-junit-formatter
     STYLELINT_REDIRECT=> $(ARTIFACT_DIR)/test_results/stylelint/stylelint.junit.xml
-    JEST_ENV_VARIABLES=JEST_JUNIT_OUTPUT=$(ARTIFACT_DIR)/test_results/jest/jest.junit.xml
+    JEST_ENV_VARIABLES=JEST_SUITE_NAME="Jest Tests" JEST_JUNIT_OUTPUT=$(ARTIFACT_DIR)/test_results/jest/jest.junit.xml
+    JEST_E2E_ENV_VARIABLES=JEST_SUITE_NAME="E2E Tests" JEST_JUNIT_OUTPUT=$(ARTIFACT_DIR)/test_results/e2e/e2e.junit.xml
     JEST_EXTRA_ARGS=--testResultsProcessor ./node_modules/jest-junit
 else
     ESLINT_EXTRA_ARGS=
     STYLELINT_EXTRA_ARGS=
     STYLELINT_REDIRECT=
     JEST_ENV_VARIABLES=
+    JEST_E2E_ENV_VARIABLES=
     JEST_EXTRA_ARGS=
 endif
 
+JEST_ARGS=--config '${INTERNALS_DIR}/testing/jestConfig.json' ${JEST_EXTRA_ARGS}
+JEST_E2E_ARGS=--config '${INTERNALS_DIR}/testing/e2e/jestE2EConfig.json' ${JEST_EXTRA_ARGS}
 ESLINT_ARGS=--max-warnings 0 ${ESLINT_EXTRA_ARGS}
 STYLELINT_ARGS=${STYLELINT_EXTRA_ARGS} ${STYLELINT_REDIRECT}
 
@@ -54,26 +60,19 @@ help:
 	@echo "make test-watch                      - re-runs tests on file changes - VERY useful"
 	@echo "make test-snapshots                  - updates the jest snapshots"
 	@echo "make test-coverage                   - creates a coverage report and opens it in your browser"
-	@echo "make analyze                         - analyzes your webpack bundle"
+	@echo "make test-e2e                        - runs the E2E test suite against localhost (make sure your server is running)"
 	@echo ""
 	@echo "------------------ Other Commands (for CI / Production) --------------------"
 	@echo "PROD=1 make build                    - build the project distribution"
-	@echo "make install-no-clean                - installs without cleaning dependencies, for improved caching on CI"
 	@echo "CI=1 make lint                       - runs eslint, stylelint and generates a junit file containing any errors"
 	@echo "CI=1 make test                       - runs the jest test suite and outputs coverage and junit information"
-	@echo "make install-deployment-deps         - installs dependencies needed for the deployment scripts"
 	@echo "make deploy-staging                  - deploys the staging environment"
 	@echo "make deploy-production               - deploys the production environment"
 
-# ---- Installing, Building and Running ----
+# ---- Installing and Running ----
 
 .PHONY: install
 install: check-versions clean node_modules
-
-.PHONY: build
-build: check-versions node_modules
-	@rm -rf ${BUILD_DIR}
-	${NODE_ENVIRONMENT} webpack ${WEBPACK_ARGS}
 
 .PHONY: start
 start: check-versions node_modules
@@ -90,7 +89,7 @@ lint: eslint stylelint
 
 .PHONY: eslint
 eslint: check-versions node_modules ${ARTIFACT_DIR}
-	eslint ${ESLINT_ARGS} '${SRC_DIR}/**/*.js'
+	eslint ${ESLINT_ARGS} .
 
 .PHONY: stylelint
 stylelint: check-versions node_modules ${ARTIFACT_DIR}
@@ -98,41 +97,37 @@ stylelint: check-versions node_modules ${ARTIFACT_DIR}
 
 .PHONY: lint-fix
 lint-fix: check-versions node_modules
-	eslint --fix '${SRC_DIR}/**/*.js'
+	eslint --fix .
 
 # -------------- Testing --------------
 
 .PHONY: test
-test: check-versions ${ARTIFACT_DIR}
-	${JEST_ENV_VARIABLES} NODE_ENV=test jest ${JEST_EXTRA_ARGS}
+test: check-versions node_modules ${ARTIFACT_DIR}
+	${JEST_ENV_VARIABLES} NODE_ENV=test jest ${JEST_ARGS}
 
 .PHONY: test-watch
-test-watch: check-versions ${ARTIFACT_DIR}
-	NODE_ENV=test jest --watch
+test-watch: check-versions node_modules ${ARTIFACT_DIR}
+	NODE_ENV=test jest ${JEST_ARGS} --watch
 
 .PHONY: test-coverage
-test-coverage: check-versions ${ARTIFACT_DIR}
-	NODE_ENV=test jest --coverage
+test-coverage: check-versions node_modules ${ARTIFACT_DIR}
+	NODE_ENV=test jest ${JEST_ARGS} --coverage
 	open ${ARTIFACT_DIR}/coverage/lcov-report/index.html
 
 .PHONY: test-snapshots
-test-snapshots: check-versions ${ARTIFACT_DIR}
-	NODE_ENV=test jest -u
+test-snapshots: check-versions node_modules ${ARTIFACT_DIR}
+	NODE_ENV=test jest ${JEST_ARGS} -u
 
-# ---------------- Misc -----------------
+.PHONY: test-e2e
+test-e2e: check-versions node_modules ${ARTIFACT_DIR}
+	${JEST_E2E_ENV_VARIABLES} NODE_ENV=test jest ${JEST_E2E_ARGS}
 
-.PHONY: analyze
-analyze: check-versions
-	node ./internals/scripts/analyze.js
+# --------------- Build & Deployment -----------------
 
-# --------------- CI Scripts -----------------
-
-.PHONY: install-no-clean
-install-no-clean: check-versions node_modules
-
-.PHONY: install-deployment-deps
-install-deployment-deps:
-	./internals/deployment/install-deployment-deps.sh
+.PHONY: build
+build: check-versions node_modules
+	@rm -rf ${BUILD_DIR}
+	${NODE_ENVIRONMENT} webpack ${WEBPACK_ARGS}
 
 .PHONY: deploy-staging
 deploy-staging:
@@ -150,7 +145,6 @@ check-versions:
 
 .PHONY: clean
 clean:
-	@rm -rf ${BUILD_DIR}
 	@rm -rf ${ARTIFACT_DIR}
 	@rm -rf node_modules
 

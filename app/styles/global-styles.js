@@ -12,20 +12,11 @@ injectGlobal`
     }
 
     body {
-        color: ${colors.basic.STEEL_GREY_900};
+        color: ${colors.basic.BLACK};
         font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     }
 
     body.sourceSansProLoaded {
         font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    }
-
-    button {
-        font-size: 0em; /* stylelint-disable-line length-zero-no-unit */
-    }
-
-    p,
-    label {
-        line-height: 1.5em;
     }
 `

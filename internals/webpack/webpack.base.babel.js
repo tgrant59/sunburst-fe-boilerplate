@@ -2,21 +2,25 @@
  * COMMON WEBPACK CONFIGURATION
  */
 
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
 
 // Remove this line once the following warning goes away (it was meant for webpack loader authors not users):
 // 'DeprecationWarning: loaderUtils.parseQuery() received a non-string value which can be problematic,
 // see https://github.com/webpack/loader-utils/issues/56 parseQuery() will be replaced with getOptions()
 // in the next major version of loader-utils.'
-process.noDeprecation = true;
+process.noDeprecation = true
 
-module.exports = (options) => ({
+module.exports = options => ({
     entry: options.entry,
-    output: Object.assign({ // Compile into artifacts/build.js
-        path: path.resolve(process.cwd(), 'artifacts/build'),
-        publicPath: '/',
-    }, options.output), // Merge with env dependent settings
+    output: Object.assign(
+        {
+            // Compile into artifacts/build.js
+            path: path.resolve(process.cwd(), 'artifacts/build'),
+            publicPath: '/',
+        },
+        options.output,
+    ), // Merge with env dependent settings
     module: {
         rules: [
             {
@@ -43,13 +47,15 @@ module.exports = (options) => ({
             },
             {
                 test: /\.(eot|svg|otf|ttf|woff|woff2)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 10000,
-                        name: '[name]-[hash].[ext]',
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 10000,
+                            name: '[name]-[hash].[ext]',
+                        },
                     },
-                }]
+                ],
             },
             {
                 test: /\.(jpg|png|gif)$/,
@@ -106,18 +112,10 @@ module.exports = (options) => ({
     ]),
     resolve: {
         modules: ['app', 'node_modules'],
-        extensions: [
-            '.js',
-            '.jsx',
-            '.react.js',
-        ],
-        mainFields: [
-            'browser',
-            'jsnext:main',
-            'main',
-        ],
+        extensions: ['.js', '.jsx', '.react.js'],
+        mainFields: ['browser', 'jsnext:main', 'main'],
     },
     devtool: options.devtool,
     target: 'web', // Make web variables accessible to webpack, e.g. window
     performance: options.performance || {},
-});
+})

@@ -1,4 +1,5 @@
-// No need to build the DLL in production
+/* eslint-disable no-undef */
+
 if (process.env.NODE_ENV === 'production') {
     process.exit(0)
 }
@@ -17,7 +18,6 @@ const outputPath = dllConfig.path
 const dllManifestPath = path.join(outputPath, 'package.json')
 
 mkdir('-p', outputPath)
-
 echo('Building the Webpack DLL...')
 
 /**
@@ -31,12 +31,10 @@ if (!exists(dllManifestPath)) {
         repository: pkg.repository,
         version: pkg.version,
     }
-    writeFile(
-        dllManifestPath,
-        JSON.stringify(dllManifest, null, 2),
-        'utf8'
-    )
+    writeFile(dllManifestPath, JSON.stringify(dllManifest, null, 2), 'utf8')
 }
 
 // the BUILDING_DLL env var is set to avoid confusing the development environment
-exec('BUILDING_DLL=true webpack --display-chunks --color --config internals/webpack/webpack.dll.babel.js --hide-modules')
+exec(
+    'BUILDING_DLL=true webpack --display-chunks --color --config internals/webpack/webpack.dll.babel.js --hide-modules',
+)

@@ -5,7 +5,6 @@ export default {
         BLUE: '#0074d9',
         FUCHSIA: '#f012be',
         GRAY: '#aaaaaa',
-        GRAY_LIGHT: '#ced6db',
         GREEN: '#2ecc40',
         LIME: '#01ff70',
         MAROON: '#85144b',
@@ -18,14 +17,6 @@ export default {
         TEAL: '#39cccc',
         WHITE: '#FFFFFF',
         YELLOW: '#ffdc00',
-    },
-    brand: {
-        BLACK: '#111111',
-        DARK_ORANGE: '#cc5803',
-        ORANGE: '#ff8019',
-        LIGHT_YELLOW: '#ffc971',
-        YELLOW: '#ffb627',
-        WHITE: '#FCF9F9',
     },
     links: {
         COLOR: '#2671dd',

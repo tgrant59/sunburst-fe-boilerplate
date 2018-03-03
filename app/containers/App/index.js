@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import { Switch, Route } from 'react-router-dom'
 import styled from 'styled-components'
 
-import HomePage from 'containers/HomePage'
+import ExamplePage from 'containers/ExamplePage/Loadable'
 import LogErrors from 'containers/LogErrors'
 import NotFoundPage from 'containers/NotFoundPage/Loadable'
 import routes from 'routes'
@@ -22,7 +22,7 @@ const AppWrapper = styled.div`
 
 export function App() {
     return (
-        <AppWrapper>
+        <AppWrapper id="react-app-wrapper">
             <Helmet
                 titleTemplate={messages.helmet.titleTemplate}
                 defaultTitle={messages.helmet.defaultTitle}
@@ -34,7 +34,11 @@ export function App() {
             </Helmet>
             <LogErrors boundaryName="routes">
                 <Switch>
-                    <Route exact path={routes.HOMEPAGE} component={HomePage} />
+                    <Route
+                        exact
+                        path={routes.HOMEPAGE}
+                        component={ExamplePage}
+                    />
                     <Route component={NotFoundPage} />
                 </Switch>
             </LogErrors>

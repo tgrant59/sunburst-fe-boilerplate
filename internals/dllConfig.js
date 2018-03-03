@@ -1,6 +1,6 @@
-const resolve = require('path').resolve;
-const pullAll = require('lodash/pullAll');
-const uniq = require('lodash/uniq');
+const resolve = require('path').resolve
+const pullAll = require('lodash/pullAll')
+const uniq = require('lodash/uniq')
 
 /**
  * The DLL Plugin provides a dramatic speed increase to webpack build and hot module reloading
@@ -11,6 +11,7 @@ const uniq = require('lodash/uniq');
 const dllName = 'feDeps'
 
 const DLLConfig = {
+    version: '0.1.0',
     name: dllName,
 
     /**
@@ -31,12 +32,7 @@ const DLLConfig = {
      * Specify any additional dependencies here. We include core-js and lodash
      * since a lot of our dependencies depend on them and they get picked up by webpack.
      */
-    include: [
-        'core-js',
-        'eventsource-polyfill',
-        'babel-polyfill',
-        'lodash',
-    ],
+    include: ['core-js', 'eventsource-polyfill', 'babel-polyfill', 'lodash'],
 
     // The path where the DLL manifest and bundle will get built
     path: resolve(`node_modules/${dllName}`),
@@ -48,9 +44,9 @@ const DLLConfig = {
         const includeDependencies = uniq(dependencyNames.concat(include))
 
         return {
-          [DLLConfig.name]: pullAll(includeDependencies, exclude),
-        };
+            [DLLConfig.name]: pullAll(includeDependencies, exclude),
+        }
     },
-};
+}
 
-module.exports = DLLConfig;
+module.exports = DLLConfig
